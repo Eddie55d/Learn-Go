@@ -7,7 +7,7 @@
 // Выведите одно целое число - ответ на задачу.
 
 // Sample Input: 123
-// Sample Output: 3
+// Sample Output:   3
 
 package main
 
