@@ -26,9 +26,7 @@ func main() {
 	var num int
 	for num <= 100 {
 		fmt.Scan(&num)
-		if num < 10 {
-			continue
-		} else if num > 9 && num <= 100 {
+		if num > 9 && num <= 100 {
 			fmt.Println(num)
 		}
 	}
