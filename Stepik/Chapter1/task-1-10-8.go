@@ -38,8 +38,7 @@ func main() {
 
 	for i := 0; i < len(a1); i++ {
 		if strings.Contains(b1, string(a1[i])) {
-			c, _ := strconv.Atoi(string(a1[i]))
-			fmt.Printf("%v ", c)
+			fmt.Printf("%s ", string(a1[i]))
 		}
 	}
 
