@@ -25,7 +25,9 @@ import (
 func main() {
 	var a float64
 	fmt.Scan(&a)
+
 	h := int(a) / 30
 	m := (math.Mod(a, 30)) * 2
+
 	fmt.Printf("It is %v hours %v minutes.", h, m)
 }

@@ -16,21 +16,18 @@ import (
 	"strconv"
 )
 
-var (
-	num int
-	str string
-)
-
 func main() {
+
+	var num int
+
 	fmt.Print("Введите число не более 10000: ")
 	fmt.Scan(&num)
-	if num <= 10000 {
 
+	if num <= 10000 {
 		str := strconv.Itoa(num)
-		fmt.Println(str)
 		s := str[len(str)-1]
-		//fmt.Println(string(s))
 		end, _ := strconv.Atoi(string(s))
+
 		fmt.Printf("%v the last digit in the number %v", end, num)
 	} else {
 		println("число больше 10000")

@@ -21,6 +21,7 @@ import (
 func main() {
 	var a float64
 	fmt.Scan(&a)
+
 	n6 := int(math.Mod(a, 10))
 	n5 := int(math.Mod((a / 10), 10))
 	n4 := int(math.Mod((a / 100), 10))

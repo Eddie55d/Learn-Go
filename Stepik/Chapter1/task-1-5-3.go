@@ -16,6 +16,6 @@ import "fmt"
 func main() {
 	var a int
 	fmt.Scan(&a)
-	var b int = a * a
+	b := a * a
 	fmt.Println(b)
 }

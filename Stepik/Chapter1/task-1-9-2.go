@@ -23,6 +23,7 @@ func main() {
 	var a int
 	fmt.Scan(&a)
 	str := strconv.Itoa(a)
+
 	if str[0] != str[1] && str[1] != str[2] && str[0] != str[2] {
 		fmt.Println("YES")
 	} else {
