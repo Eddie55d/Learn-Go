@@ -13,15 +13,13 @@ package main
 import "fmt"
 
 func main() {
-	var lenNums int
-	var nums int
+	var lenNums, nums int
 
 	fmt.Scan(&lenNums)
 
-	i := 1
 	sum := 0
 
-	for ; i <= lenNums; i++ {
+	for i := 1; i <= lenNums; i++ {
 		fmt.Scan(&nums)
 		if nums > 9 && nums < 100 && nums%8 == 0 {
 			sum += nums

@@ -16,14 +16,15 @@ func main() {
 	fmt.Scan(&a)
 	fmt.Scan(&b)
 
-	if a <= 100 && a < b {
-		var sum = 0
-		for a <= b {
-			sum += a
-			a++
-		}
-		fmt.Println(sum)
-	} else {
+	if a > 100 && a > b {
 		fmt.Println("incorrect input")
 	}
+
+	sum := 0
+
+	for a <= b {
+		sum += a
+		a++
+	}
+	fmt.Println(sum)
 }

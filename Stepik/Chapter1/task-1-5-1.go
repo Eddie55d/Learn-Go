@@ -15,6 +15,6 @@ import "fmt"
 func main() {
 	var a int
 	fmt.Scan(&a)
-	var total int = a*2 + 100
+	total := a*2 + 100
 	fmt.Println(total)
 }

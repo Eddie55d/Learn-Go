@@ -21,9 +21,8 @@ import "fmt"
 
 func main() {
 	var num = 10
-	var i = 1
 
-	for ; i <= num; i++ {
+	for i := 0; i <= num; i++ {
 		sum := i * i
 		fmt.Println(sum)
 	}

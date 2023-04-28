@@ -20,6 +20,5 @@ func main() {
 	var a int
 	fmt.Scan(&a)
 	str := strconv.Itoa(a)
-	num, _ := strconv.Atoi(string(str[0]))
-	fmt.Println(num)
+	fmt.Printf("%v", string(str[0]))
 }
