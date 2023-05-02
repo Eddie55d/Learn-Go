@@ -19,7 +19,7 @@ func main() {
 	var num int
 	fmt.Scan(&num)
 
-	if num < 1 && num > 100 {
+	if num < 1 || num > 100 {
 		return
 	}
 

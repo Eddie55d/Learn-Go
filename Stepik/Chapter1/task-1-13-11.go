@@ -23,7 +23,7 @@ func main() {
 	var num int
 	fmt.Scan(&num)
 
-	if num > 99 && num < 1 {
+	if num > 99 || num < 1 {
 		return
 	}
 
@@ -33,13 +33,13 @@ func main() {
 
 	switch {
 
-	case num%10 == 1 && num != 11 || num == 1:
+	case num%10 == 1 && num != 11:
 		fmt.Printf("%d %s", num, a)
 
 	case num > 4 && num < 21:
 		fmt.Printf("%d %s", num, c)
 
-	case num <= 2 && num > 5 || num%10 > 1 && num%10 < 5:
+	case num <= 2 || num%10 > 1 && num%10 < 5:
 		fmt.Printf("%d %s", num, b)
 
 	default:

@@ -25,11 +25,11 @@ func main() {
 	var A int
 	fmt.Scan(&A)
 
-	if A < 1 {
+	if A <= 1 {
 		return
 	}
 
-	fibbo := []int{0: 0, 1: 1}
+	fibbo := []int{0, 1}
 
 	prevFib := 0
 	fib := 1

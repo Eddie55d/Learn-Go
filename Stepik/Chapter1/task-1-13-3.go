@@ -30,7 +30,7 @@ func main() {
 	var sec int
 	fmt.Scan(&sec)
 
-	if sec < 1 && sec > 86399 {
+	if sec < 1 || sec > 86399 {
 		return
 	}
 

@@ -29,19 +29,17 @@ func main() {
 	var ln int
 	fmt.Scan(&ln)
 
-	if ln < 1 && ln > 100 {
+	if ln < 1 || ln > 100 {
 		return
 	}
 
-	array := make([]int, ln) // можно заменить на array := [100]int{}
 	var a int
 	sum := 0
 
 	for i := 0; i < ln; i++ {
 		fmt.Scan(&a)
-		array[i] = a
 
-		if array[i] > 0 {
+		if a > 0 {
 			sum++
 		}
 	}

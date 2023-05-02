@@ -24,8 +24,15 @@ import "fmt"
 
 func main() {
 
-	num := 1
+	var num int
+	fmt.Scan(&num)
 	sum := 0
+
+	if num == 0 {
+		fmt.Println(sum)
+		return
+	}
+
 	var prevNum int
 
 	for num != 0 {

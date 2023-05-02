@@ -18,10 +18,6 @@ func main() {
 	var num int
 	fmt.Scan(&num)
 
-	if num < 1 && num > 100 {
-		return
-	}
-
 	a1 := num / 100
 	a2 := (num / 10) % 10
 	a3 := num % 10

@@ -25,7 +25,7 @@ func main() {
 	var ln int
 	fmt.Scan(&ln)
 
-	if ln < 1 && ln > 100 {
+	if ln < 1 || ln > 100 {
 		return
 	}
 

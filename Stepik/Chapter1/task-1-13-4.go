@@ -17,7 +17,7 @@ func main() {
 
 	fmt.Scan(&a, &b, &c)
 
-	if a > b && b > c && a > c {
+	if a > b || b > c || a > c {
 		return
 	}
 
