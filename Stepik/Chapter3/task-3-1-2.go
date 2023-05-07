@@ -45,11 +45,7 @@ func main() {
 		"Липецк":  650000,
 	}
 
-	var keys []string
-
-	for _, v := range groupCity[100] {
-		keys = append(keys, v)
-	}
+	keys := groupCity[100]
 
 	for i := range cityPopulation {
 
