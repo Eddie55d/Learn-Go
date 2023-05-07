@@ -23,11 +23,7 @@ import (
 func main() {
 	text, _ := bufio.NewReader(os.Stdin).ReadString('\n')
 
-	rs := []rune{}
-
-	for _, v := range text {
-		rs = append(rs, v)
-	}
+	rs := []rune(text)
 
 	last := rs[(len(rs) - 3)]
 

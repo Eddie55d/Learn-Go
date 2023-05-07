@@ -26,11 +26,7 @@ func vote(x, y, z int) int {
 	for _, v := range nums {
 		if v == 0 {
 			count1++
-		}
-	}
-
-	for _, v := range nums {
-		if v == 1 {
+		} else {
 			count2++
 		}
 	}

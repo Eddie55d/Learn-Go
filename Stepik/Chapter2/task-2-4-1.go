@@ -31,14 +31,14 @@ func (s *Biker) Shoot() bool {
 	var shoot bool
 
 	switch {
-	case s.Ammo != 0 && s.On != false:
+	case s.Ammo != 0 && s.On:
 		s.Ammo--
 		fmt.Printf("Стреляю! Осталось выстрелов: %d.\n", s.Ammo)
 		shoot = true
-	case s.Ammo == 0 && s.On == true:
+	case s.Ammo == 0 && s.On:
 		fmt.Print("Патронов нет!\n")
 		shoot = false
-	case s.On == false:
+	case !s.On:
 		fmt.Print("Стрелять нельзя!\n")
 	}
 
@@ -49,15 +49,15 @@ func (r *Biker) RideBike() bool {
 	var ride bool
 
 	switch {
-	case r.Power != 0 && r.On != false:
+	case r.Power != 0 && r.On:
 		r.Power--
 		fmt.Printf("Еду! Осталось поездок: %d.\n", r.Power)
 		ride = true
-	case r.Power == 0 && r.On == true:
+	case r.Power == 0 && r.On:
 		fmt.Print("Поездок не осталось!\n")
 		ride = false
-	case r.On == false:
-		fmt.Print("Ехать нельзя!\n")
+	case !r.On:
+		fmt.Print("Ездить нельзя!\n")
 	}
 
 	return ride

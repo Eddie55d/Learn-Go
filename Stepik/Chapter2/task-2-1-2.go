@@ -17,7 +17,7 @@ package main
 import "fmt"
 
 func minimumFromFour() int {
-	nums := []int{}
+	nums := make([]int, 0, 4)
 	var n int
 
 	for i := 0; i < 4; i++ {
@@ -36,6 +36,5 @@ func minimumFromFour() int {
 }
 
 func main() {
-	//min := minimumFromFour()
 	fmt.Println(minimumFromFour())
 }

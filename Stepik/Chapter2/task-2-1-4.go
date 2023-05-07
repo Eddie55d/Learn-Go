@@ -25,7 +25,7 @@ import (
 
 func fibonacci(n int) int {
 
-	fibbo := []int{0: 1, 1: 1}
+	fibbo := []int{1, 1}
 
 	prevFib := 1
 	fib := 1
@@ -34,19 +34,10 @@ func fibonacci(n int) int {
 	for i := 2; i <= n; i++ {
 		nextFib = prevFib + fib
 		fibbo = append(fibbo, nextFib)
-		prevFib = fib
-		fib = nextFib
+		prevFib, fib = fib, nextFib
 	}
 
-	idx := 0
-
-	for i, v := range fibbo {
-		if i+1 == n {
-			idx = v
-		}
-	}
-
-	return idx
+	return fibbo[n-1]
 
 }
 

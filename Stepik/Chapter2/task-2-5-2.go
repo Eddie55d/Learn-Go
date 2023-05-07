@@ -29,13 +29,11 @@ func main() {
 	str3 := []string{}
 
 	for _, v := range str {
-		s := string(v)
-		str2 = append(str2, s)
+		str2 = append(str2, string(v))
 	}
 
 	for i := utf8.RuneCountInString(str) - 1; i >= 0; i-- {
-		d := string(str2[i])
-		str3 = append(str3, d)
+		str3 = append(str3, string(str2[i]))
 	}
 
 	match := "Палиндром"
@@ -45,6 +43,7 @@ func main() {
 			continue
 		} else {
 			match = "Нет"
+			break
 		}
 	}
 
