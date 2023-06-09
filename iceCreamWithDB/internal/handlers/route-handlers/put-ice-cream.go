@@ -2,10 +2,6 @@ package routehandlers
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
-	"strconv"
-	"time"
 
 	"ice-cream-app/internal/database"
 	"ice-cream-app/internal/models"
@@ -13,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 func PutIceCream(c *gin.Context) {
@@ -20,7 +17,7 @@ func PutIceCream(c *gin.Context) {
 	defer db.Close()
 
 	var iceCream models.IceCream
-	var upIce models.IceCreamUp
+	var upIce models.IceCreamPost
 	id := c.Param("id")
 
 	errGet := db.QueryRow("SELECT * FROM icecreams WHERE icecream_id = $1", id).
@@ -31,60 +28,35 @@ func PutIceCream(c *gin.Context) {
 	}
 
 	if err := c.BindJSON(&upIce); err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
 		return
 	}
 
 	stmt, err := db.Prepare("UPDATE icecreams SET title=$1, composition=$2, date_of_manufacture=$3, expiration_date=$4, price=$5 WHERE icecream_id=$6")
 	if err != nil {
-		log.Fatal(err)
+		logrus.Error(err)
+		return
 	}
 
 	defer stmt.Close()
 
-	if upIce.Title == "" {
-		upIce.Title = iceCream.Title
-	}
-
-	if upIce.Сomposition == "" {
-		upIce.Сomposition = iceCream.Сomposition
-	}
-
-	if upIce.DateOfManufacture == "" {
-		upIce.DateOfManufacture = iceCream.DateOfManufacture.Format("2006-01-02")
-	}
-
-	if upIce.ExpirationDate == "" {
-		upIce.ExpirationDate = iceCream.ExpirationDate.Format("2006-01-02")
-	}
-
-	if upIce.Price == "" {
-		upIce.Price = iceCream.Price
-	}
-
-	dtST, err := time.Parse("2006-01-02", upIce.DateOfManufacture)
+	validUpdate, msg, err := upIce.ValidUpdate(&iceCream)
 	if err != nil {
-		fmt.Println(err)
+		c.JSON(http.StatusNotFound, gin.H{"message": msg, "error": err})
+		logrus.Error(err)
+		return
 	}
 
-	dtEnd, err := time.Parse("2006-01-02", upIce.ExpirationDate)
+	res, err := stmt.Exec(validUpdate.Title, validUpdate.Сomposition, validUpdate.DateOfManufacture, validUpdate.ExpirationDate, validUpdate.Price, id)
 	if err != nil {
-		fmt.Println(err)
-	}
-
-	pr, err := strconv.ParseFloat(upIce.Price, 32)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	res, err := stmt.Exec(upIce.Title, upIce.Сomposition, dtST, dtEnd, pr, id)
-	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
+		return
 	}
 
 	n, err := res.RowsAffected()
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
+		return
 	}
 
 	if n == 0 {

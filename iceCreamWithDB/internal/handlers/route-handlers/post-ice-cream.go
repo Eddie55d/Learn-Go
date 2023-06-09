@@ -1,14 +1,12 @@
 package routehandlers
 
 import (
-	"fmt"
 	"ice-cream-app/internal/database"
 	"ice-cream-app/internal/models"
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 func PostIceCream(c *gin.Context) {
@@ -22,73 +20,35 @@ func PostIceCream(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(newIceCream)
-
-	if newIceCream.Title == "" {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "title field is empty"})
-		return
-	}
-
-	if newIceCream.Сomposition == "" {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "composition field is empty"})
-		return
-	}
-
-	if newIceCream.Price == "" {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "price field is empty"})
-		return
-	}
-
-	tm, err := time.Parse("2006-01-02", newIceCream.DateOfManufacture)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	if tm.IsZero() {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "DateOfManufacture field is empty"})
-		return
-	}
-
-	tExp, err := time.Parse("2006-01-02", newIceCream.DateOfManufacture)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	if tExp.IsZero() {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "ExpirationDate field is empty"})
-		return
-	}
-
-	dtST, err := time.Parse("2006-05-01", newIceCream.DateOfManufacture)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	dtEnd, err := time.Parse("2006-05-01", newIceCream.ExpirationDate)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	pr, err := strconv.ParseFloat(newIceCream.Price, 32)
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	stmt, err := db.Prepare("INSERT INTO icecreams (title, composition, date_of_manufacture, expiration_date, price) VALUES ($1, $2, $3, $4, $5) RETURNING icecream_id")
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
+		return
 	}
 
 	defer stmt.Close()
 
-	res, err := stmt.Exec(newIceCream.Title, newIceCream.Сomposition, dtST, dtEnd, pr)
+	validIce, msg, err := newIceCream.ValidPost()
+	if err != nil && msg == "" {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err})
+		logrus.Error(err)
+		return
+	}
+
+	if msg != "" {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": msg})
+		logrus.Errorf(msg)
+		return
+	}
+
+	res, err := stmt.Exec(validIce.Title, validIce.Сomposition, validIce.DateOfManufacture, validIce.ExpirationDate, validIce.Price)
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
 	}
 
 	lastId, err := res.RowsAffected()
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
 	}
 
 	if lastId == 0 {

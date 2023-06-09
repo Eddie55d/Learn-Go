@@ -1,8 +1,7 @@
 package routehandlers
 
 import (
-	"fmt"
-	"log"
+	"github.com/sirupsen/logrus"
 
 	"ice-cream-app/internal/database"
 
@@ -20,26 +19,30 @@ func DeleteIceCream(c *gin.Context) {
 
 	stmt, err := db.Prepare("DELETE FROM icecreams WHERE icecream_id=$1")
 	if err != nil {
-		log.Fatal(err)
+		logrus.Error(err)
+		return
 	}
 
 	defer stmt.Close()
 
 	res, err := stmt.Exec(id)
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
+		return
 	}
 
 	n, err := res.RowsAffected()
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
+		return
 	}
 
 	if n == 0 {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "ice cream not found"})
+		logrus.Info("ice cream not found")
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "ice cream deleted"})
-
+	logrus.Info("ice cream deleted")
 }
