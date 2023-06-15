@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS icecreams
   date_of_manufacture DATE NOT NULL,
   expiration_date DATE NOT NULL,
   price REAL NOT NULL,
+  is_deleted TIMESTAMP(0),
 
   CONSTRAINT pk_icecreams_icecream_id PRIMARY KEY(icecream_id)
 )

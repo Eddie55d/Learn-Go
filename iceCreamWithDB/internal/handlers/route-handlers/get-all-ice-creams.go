@@ -1,6 +1,7 @@
 package routehandlers
 
 import (
+	"fmt"
 	"ice-cream-app/internal/database"
 	"ice-cream-app/internal/models"
 
@@ -14,7 +15,33 @@ func GetIceCreams(c *gin.Context) {
 
 	db := database.ConnectDB()
 	defer db.Close()
-	rows, err := db.Query("SELECT * FROM icecreams")
+
+	selectRow := "SELECT icecream_id, title, composition, date_of_manufacture, expiration_date, price FROM icecreams WHERE is_deleted IS NULL ORDER BY icecream_id"
+
+	_, isManufactureDate := c.GetQuery("date_of_manufacture")
+	_, isExpirationDate := c.GetQuery("expiration_date")
+	_, isPrice := c.GetQuery("price")
+
+	switch {
+	case isManufactureDate:
+		selectRow = "SELECT icecream_id, title, composition, date_of_manufacture, expiration_date, price FROM icecreams WHERE is_deleted IS NULL ORDER BY date_of_manufacture "
+	case isExpirationDate:
+		selectRow = "SELECT icecream_id, title, composition, date_of_manufacture, expiration_date, price FROM icecreams WHERE is_deleted IS NULL ORDER BY expiration_date "
+	case isPrice:
+		selectRow = "SELECT icecream_id, title, composition, date_of_manufacture, expiration_date, price FROM icecreams WHERE is_deleted IS NULL ORDER BY price "
+	}
+
+	limit := c.Query("limit")
+	if limit != "" {
+		selectRow += fmt.Sprintf(` LIMIT %s`, limit)
+	}
+
+	offset := c.Query("offset")
+	if offset != "" {
+		selectRow += fmt.Sprintf(` OFFSET %s`, offset)
+	}
+
+	rows, err := db.Query(selectRow)
 	if err != nil {
 		logrus.Error(err)
 		return

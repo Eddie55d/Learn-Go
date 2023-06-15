@@ -21,7 +21,7 @@ func GetIceCreamByID(c *gin.Context) {
 
 	id := c.Param("id")
 
-	err := db.QueryRow("SELECT * FROM icecreams WHERE icecream_id = $1", id).
+	err := db.QueryRow("SELECT icecream_id, title, composition, date_of_manufacture, expiration_date, price FROM icecreams WHERE icecream_id = $1 AND is_deleted IS NULL", id).
 		Scan(&iceCream.Icecream_id, &iceCream.Title, &iceCream.Сomposition, &iceCream.DateOfManufacture, &iceCream.ExpirationDate, &iceCream.Price)
 
 	switch {

@@ -129,6 +129,51 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "limit and offset",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/icecreams?limit=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"icecreams"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "offset",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "price",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "date_of_manufacture",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "expiration_date",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

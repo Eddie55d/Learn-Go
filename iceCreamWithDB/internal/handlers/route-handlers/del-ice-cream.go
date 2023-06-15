@@ -1,6 +1,8 @@
 package routehandlers
 
 import (
+	"time"
+
 	"github.com/sirupsen/logrus"
 
 	"ice-cream-app/internal/database"
@@ -17,7 +19,7 @@ func DeleteIceCream(c *gin.Context) {
 
 	id := c.Param("id")
 
-	stmt, err := db.Prepare("DELETE FROM icecreams WHERE icecream_id=$1")
+	stmt, err := db.Prepare("UPDATE icecreams SET is_deleted = $2 WHERE icecream_id = $1 AND is_deleted IS NULL")
 	if err != nil {
 		logrus.Error(err)
 		return
@@ -25,7 +27,9 @@ func DeleteIceCream(c *gin.Context) {
 
 	defer stmt.Close()
 
-	res, err := stmt.Exec(id)
+	deleteTime := time.Now()
+
+	res, err := stmt.Exec(id, deleteTime)
 	if err != nil {
 		logrus.Error(err)
 		return

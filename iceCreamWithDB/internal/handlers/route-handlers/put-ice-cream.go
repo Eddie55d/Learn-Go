@@ -20,11 +20,12 @@ func PutIceCream(c *gin.Context) {
 	var upIce models.IceCreamPost
 	id := c.Param("id")
 
-	errGet := db.QueryRow("SELECT * FROM icecreams WHERE icecream_id = $1", id).
+	errGet := db.QueryRow("SELECT * FROM icecreams WHERE icecream_id = $1 AND is_deleted IS NULL", id).
 		Scan(&iceCream.Icecream_id, &iceCream.Title, &iceCream.Сomposition, &iceCream.DateOfManufacture, &iceCream.ExpirationDate, &iceCream.Price)
 
 	if errGet == sql.ErrNoRows {
 		c.JSON(http.StatusNotFound, gin.H{"message": "ice cream not found"})
+		return
 	}
 
 	if err := c.BindJSON(&upIce); err != nil {
