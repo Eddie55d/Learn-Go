@@ -18,7 +18,7 @@ type IceCream struct {
 
 type IceCreamPost struct {
 	Title             string `json:"title"`
-	Сomposition       string `json:"composition"`
+	Composition       string `json:"composition"`
 	DateOfManufacture string `json:"date_of_manufacture"`
 	ExpirationDate    string `json:"expiration_date"`
 	Price             string `json:"price"`
@@ -43,7 +43,7 @@ func (newIceCream *IceCreamPost) ValidPost() (validIceCream *IceCreamPostValid, 
 		return nil, message, err
 	}
 
-	if newIceCream.Сomposition == "" {
+	if newIceCream.Composition == "" {
 		message += "composition field is empty"
 		return nil, message, err
 	}
@@ -93,7 +93,7 @@ func (newIceCream *IceCreamPost) ValidPost() (validIceCream *IceCreamPostValid, 
 
 	newIceCreamValid := IceCreamPostValid{
 		Title:             newIceCream.Title,
-		Сomposition:       newIceCream.Сomposition,
+		Сomposition:       newIceCream.Composition,
 		DateOfManufacture: dtST,
 		ExpirationDate:    dtEnd,
 		Price:             pr,
@@ -112,8 +112,8 @@ func (upIce *IceCreamPost) ValidUpdate(iceCream *IceCream) (validIceCream *IceCr
 		upIce.Title = iceCream.Title
 	}
 
-	if upIce.Сomposition == "" {
-		upIce.Сomposition = iceCream.Сomposition
+	if upIce.Composition == "" {
+		upIce.Composition = iceCream.Сomposition
 	}
 
 	if upIce.DateOfManufacture == "" {
@@ -151,7 +151,7 @@ func (upIce *IceCreamPost) ValidUpdate(iceCream *IceCream) (validIceCream *IceCr
 
 	newIceCreamValidUpdate := IceCreamPostValid{
 		Title:             upIce.Title,
-		Сomposition:       upIce.Сomposition,
+		Сomposition:       upIce.Composition,
 		DateOfManufacture: dtST,
 		ExpirationDate:    dtEnd,
 		Price:             pr,
