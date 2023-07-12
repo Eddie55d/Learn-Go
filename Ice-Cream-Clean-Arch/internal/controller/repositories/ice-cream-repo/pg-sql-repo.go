@@ -83,7 +83,14 @@ func (icecream *IceCreamDbStore) GetIceCreamByID(paramID string) (models.IceCrea
 	id := paramID
 	var iceCream models.IceCream
 
-	err := icecream.db.QueryRow("SELECT icecream_id, title, composition, date_of_manufacture, expiration_date, price FROM icecreams WHERE icecream_id = $1 AND is_deleted IS NULL", id).
+	err := icecream.db.QueryRow(`SELECT icecream_id, 
+																			title, 
+																			composition, 
+																			date_of_manufacture, 
+																			expiration_date, 
+																			price 
+																			FROM icecreams 
+																			WHERE icecream_id = $1 AND is_deleted IS NULL`, id).
 		Scan(
 			&iceCream.IceCreamID,
 			&iceCream.Title,
@@ -97,7 +104,6 @@ func (icecream *IceCreamDbStore) GetIceCreamByID(paramID string) (models.IceCrea
 	case err != nil && !errors.Is(err, sql.ErrNoRows):
 		return iceCream, err
 	case errors.Is(err, sql.ErrNoRows):
-
 		return iceCream, models.ErrSqlNoRow
 	default:
 		return iceCream, err
