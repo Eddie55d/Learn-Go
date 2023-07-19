@@ -111,7 +111,7 @@ func (icecream *IceCreamDbStore) GetIceCreamByID(paramID string) (models.IceCrea
 }
 
 // Delete Ice Cream
-func (icecream *IceCreamDbStore) DeleteIceCream(paramID string) (int64, error) {
+func (icecream *IceCreamDbStore) DeleteIceCream(paramID string) error {
 
 	id := paramID
 	deleteTime := time.Now()
@@ -119,15 +119,18 @@ func (icecream *IceCreamDbStore) DeleteIceCream(paramID string) (int64, error) {
 	res, err := icecream.db.Exec("UPDATE icecreams SET is_deleted = $2 WHERE icecream_id = $1 AND is_deleted IS NULL",
 		id, deleteTime)
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	delID, err := res.RowsAffected()
-	if err != nil {
-		return delID, err
+	deleteRow, err := res.RowsAffected()
+	if err != nil && deleteRow != 0 {
+		return err
+	}
+	if deleteRow == 0 {
+		return models.ErrSqlNoRow
 	}
 
-	return delID, err
+	return nil
 }
 
 // Post Ice Cream
@@ -166,7 +169,7 @@ func (icecream *IceCreamDbStore) PostIceCream(iceCream models.IceCreamPost) (int
 }
 
 // Update Ice Cream
-func (icecream *IceCreamDbStore) PutIceCream(paramID int, iceCream models.IceCreamPost) (int64, error) {
+func (icecream *IceCreamDbStore) PutIceCream(paramID int, iceCream models.IceCreamPost) error {
 	const insertQuery = `
 	UPDATE icecreams SET 
 	title=$1, 
@@ -189,13 +192,16 @@ func (icecream *IceCreamDbStore) PutIceCream(paramID int, iceCream models.IceCre
 		id,                            // $6, icecreamID
 	)
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	putID, err := res.RowsAffected()
-	if err != nil {
-		return 0, err
+	updateRow, err := res.RowsAffected()
+	if err != nil && updateRow != 0 {
+		return err
+	}
+	if updateRow == 0 {
+		return models.ErrSqlNoRow
 	}
 
-	return putID, err
+	return nil
 }

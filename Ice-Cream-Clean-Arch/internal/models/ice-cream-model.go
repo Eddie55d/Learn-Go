@@ -30,12 +30,13 @@ type IceCreamPost struct {
 
 // errors POST ice cream
 var (
-	ErrTitleEmpty        = errors.New("title field is empty")
-	ErrCompositionEmpty  = errors.New("composition field is empty")
-	ErrPriceEmpty        = errors.New("price field is zero or negative")
-	ErrPrice             = errors.New("price field value is not a digit")
-	ErrDateOfManufacture = errors.New("dateOfManufacture field is empty or invalid")
-	ErrExpirationDate    = errors.New("expirationDate field is empty or invalid")
+	ErrTitleEmpty           = errors.New("title field is empty")
+	ErrCompositionEmpty     = errors.New("composition field is empty")
+	ErrPriceEmpty           = errors.New("price field is zero or negative")
+	ErrPrice                = errors.New("price field value is not a digit")
+	ErrDateOfManufacture    = errors.New("dateOfManufacture field is empty or invalid")
+	ErrExpirationDate       = errors.New("expirationDate field is empty or invalid")
+	ErrExpirationDateBefore = errors.New("date of manufacture must be before the expiration date")
 )
 
 // Validation POST ice cream
@@ -58,10 +59,15 @@ func (i *IceCreamPost) Validate() error {
 
 	expirationDate, err := time.Parse("2006-01-02", i.ExpirationDate)
 	if err != nil {
-		return ErrDateOfManufacture
+		return ErrExpirationDate
 	}
 	if expirationDate.IsZero() {
 		return ErrExpirationDate
+	}
+
+	dateBefore := dateManufacture.Before(expirationDate)
+	if !dateBefore {
+		return ErrExpirationDateBefore
 	}
 
 	pr, err := strconv.ParseFloat(i.Price, 64)

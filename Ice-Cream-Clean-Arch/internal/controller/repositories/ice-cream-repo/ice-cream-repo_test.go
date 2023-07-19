@@ -118,12 +118,13 @@ func TestIcecreamRepoGetIdErr(t *testing.T) {
 	repo.db = db
 
 	_, err = repo.GetIceCreamByID("1")
-	if err != nil && err != models.ErrSqlNoRow {
-		t.Error(err)
+
+	if err == nil {
+		t.Errorf("Expected: error models.ErrSqlNoRow, got: error nil")
 		return
 	}
-
-	if err == models.ErrSqlNoRow {
+	if err != nil && err != models.ErrSqlNoRow {
+		t.Errorf("Expected: error models.ErrSqlNoRow, got: %v", err)
 		return
 	}
 
@@ -151,14 +152,14 @@ func TestIcecreamRepoDeleteIceCream(t *testing.T) {
 
 	repo.db = db
 
-	res, err := repo.DeleteIceCream("1")
-	if err != nil {
+	err = repo.DeleteIceCream("1")
+	if err != nil && err != models.ErrSqlNoRow {
 		t.Error(err)
 		return
 	}
 
-	if res != affected {
-		t.Errorf("Expected: %d row deleted, got: %d row deleted", affected, res)
+	if err == models.ErrSqlNoRow {
+		t.Errorf("Expected: %d row deleted, got: %d row deleted", affected, 0)
 		return
 	}
 
@@ -185,13 +186,13 @@ func TestIcecreamRepoDeleteIceCreamErr(t *testing.T) {
 
 	repo.db = db
 
-	res, err := repo.DeleteIceCream("1")
-	if err != nil {
-		t.Error(err)
+	err = repo.DeleteIceCream("1")
+	if err == nil {
+		t.Errorf("Expected: error models.ErrSqlNoRow, got: error nil")
 		return
 	}
-
-	if res == affected {
+	if err != nil && err != models.ErrSqlNoRow {
+		t.Errorf("Expected: error models.ErrSqlNoRow, got: %v", err)
 		return
 	}
 

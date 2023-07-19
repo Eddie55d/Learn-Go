@@ -37,22 +37,15 @@ func (h *PutIceCreamHandler) PostIceCream(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	case errors.Is(err, models.ErrSqlNoRow):
-		c.JSON(http.StatusNotFound, gin.H{"message": "ice cream not found"})
 		logrus.Info("ice cream not found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "ice cream not found"})
 		return
 	}
 
 	var updateIceCream models.IceCreamPost
 	if err := c.BindJSON(&updateIceCream); err != nil {
-		logrus.Warn(err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Fields are not filled correctly"})
-		return
-	}
-
-	validUpdate, err := updateIceCream.ValidUpdate(&iceCream)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		logrus.Error(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Fields are not filled correctly"})
 		return
 	}
 
@@ -62,20 +55,30 @@ func (h *PutIceCreamHandler) PostIceCream(c *gin.Context) {
 		return
 	}
 
-	res, err := h.service.PutIceCream(paramID, validUpdate)
+	err = h.service.PutIceCream(paramID, &iceCream, &updateIceCream)
 	switch {
+	case
+		errors.Is(err, models.ErrTitleEmpty) ||
+			errors.Is(err, models.ErrCompositionEmpty) ||
+			errors.Is(err, models.ErrDateOfManufacture) ||
+			errors.Is(err, models.ErrExpirationDate) ||
+			errors.Is(err, models.ErrPriceEmpty) ||
+			errors.Is(err, models.ErrPrice):
+		logrus.Error(err)
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
 	case err != nil && !errors.Is(err, models.ErrSqlNoRow):
 		logrus.Error(err)
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
-	case errors.Is(err, models.ErrSqlNoRow) || res == 0:
-		c.JSON(http.StatusBadRequest, gin.H{"message": "nothing has been updated"})
+	case errors.Is(err, models.ErrSqlNoRow):
 		logrus.Error("nothing has been updated")
+		c.JSON(http.StatusBadRequest, gin.H{"message": "nothing has been updated"})
 		return
 	default:
 		var updateMsg = fmt.Sprintf("ice cream with id %d updated!", paramID)
-		c.IndentedJSON(http.StatusCreated, gin.H{"message": updateMsg})
 		logrus.Info(updateMsg)
+		c.IndentedJSON(http.StatusCreated, gin.H{"message": updateMsg})
 	}
 
 }

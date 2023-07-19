@@ -1,10 +1,10 @@
 {
   "database": {
-    "host": "localhost",
-    "port": "5433",
+    "host": "127.0.0.1",
+    "port": "5432",
     "name": "IceCream",
-    "user": "postgres",
-    "password": "12345",
+    "user": "postgresUser",
+    "password": "postgresPass",
     "sslmode": "disable",
     "connect-timeout": "10"
   } 

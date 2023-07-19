@@ -26,16 +26,25 @@ func (s IceCreamService) GetIceCreamByID(paramID string) (models.IceCream, error
 }
 
 // detete ice cream
-func (s IceCreamService) DeleteIceCream(paramID string) (int64, error) {
+func (s IceCreamService) DeleteIceCream(paramID string) error {
 	return s.IceCreamRepo.DeleteIceCream(paramID)
 }
 
 // post ice cream
 func (s IceCreamService) PostIceCream(iceCream models.IceCreamPost) (int64, error) {
+	err := iceCream.Validate()
+	if err != nil {
+		return 0, err
+	}
 	return s.IceCreamRepo.PostIceCream(iceCream)
 }
 
 // update ice cream
-func (s IceCreamService) PutIceCream(paramID int, iceCream *models.IceCreamPost) (int64, error) {
-	return s.IceCreamRepo.PutIceCream(paramID, *iceCream)
+func (s IceCreamService) PutIceCream(paramID int, iceCream *models.IceCream, iceCreamPut *models.IceCreamPost) error {
+
+	validIceCream, err := iceCreamPut.ValidUpdate(iceCream)
+	if err != nil {
+		return err
+	}
+	return s.IceCreamRepo.PutIceCream(paramID, *validIceCream)
 }

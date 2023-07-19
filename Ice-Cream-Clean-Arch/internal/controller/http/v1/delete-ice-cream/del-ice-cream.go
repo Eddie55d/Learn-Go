@@ -1,8 +1,10 @@
 package deleteicecream
 
 import (
+	"errors"
 	"fmt"
 	"ice-cream-app/internal/controller/services"
+	"ice-cream-app/internal/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,14 +27,14 @@ func (h *DeleteIceCreamHandler) DelIceCream(c *gin.Context) {
 		return
 	}
 
-	iceCream, err := h.service.DeleteIceCream(id)
+	err := h.service.DeleteIceCream(id)
 
 	switch {
-	case err != nil && iceCream != 0:
+	case err != nil && !errors.Is(err, models.ErrSqlNoRow):
 		logrus.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
-	case iceCream == 0:
+	case errors.Is(err, models.ErrSqlNoRow):
 		c.JSON(http.StatusNotFound, gin.H{"message": "ice cream not found"})
 		logrus.Info("ice cream not found")
 		return
