@@ -1,0 +1,27 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: icecream-app
+  namespace: default
+  labels:
+    app: icecream-app
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30248
+  selector:
+    app: icecream-app
+  clusterIP: 10.104.222.188
+  clusterIPs:
+    - 10.104.222.188
+  type: NodePort
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  internalTrafficPolicy: Cluster
+status:
+  loadBalancer: {}
