@@ -1,6 +1,3 @@
-// Решить задачу:
-// https://leetcode.com/problems/reverse-linked-list/
-
 package main
 
 import "fmt"
@@ -64,14 +61,14 @@ func main() {
 
 	fmt.Println("After reverse:")
 	func(s singleList) {
-		for list.head != nil {
-			node := reverseList(list.head)
+		for s.head != nil {
+			node := reverseList(s.head)
 			for node != nil {
 
 				fmt.Printf("%v\n", node.Val)
 				node = node.Next
 			}
-			list.head = list.head.Next
+			s.head = s.head.Next
 		}
 	}(*list)
 }

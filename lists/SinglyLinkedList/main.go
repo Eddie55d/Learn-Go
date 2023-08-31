@@ -66,15 +66,34 @@ func (s *singleList) Delete(str string) (string, error) {
 	isDeleted := false
 	nodeName := ""
 
-	for sl.head != nil {
-		if sl.head.next.name == str {
-
-			nodeName += sl.head.next.name
-			sl.head.next = sl.head.next.next
-			isDeleted = true
-			break
-		}
+	if sl.head.name == str {
+		nodeName += sl.head.name
 		sl.head = sl.head.next
+		isDeleted = true
+	} else {
+
+		current := sl.head
+		for current != nil {
+			if current.next == nil {
+				break
+			}
+			if current.next.name == str {
+
+				nodeName += current.next.name
+				if current.next.next != nil {
+					tail := current.next.next
+					current.next = tail
+					isDeleted = true
+					break
+				} else {
+
+					current.next = nil
+					isDeleted = true
+					break
+				}
+			}
+			current = current.next
+		}
 	}
 
 	if isDeleted {
@@ -151,6 +170,12 @@ func main() {
 	fmt.Println(elB)
 
 	str, err = list.Delete("B")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(str)
+
+	str, err = list.Delete("C")
 	if err != nil {
 		fmt.Println(err)
 	}
