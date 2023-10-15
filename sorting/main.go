@@ -124,15 +124,54 @@ func partition(arr []int, lo, hi int) int {
 	return j
 }
 
+//heap sort
+func heapSort(arr []int) []int {
+
+	for i := len(arr) / 2; i >= 0; i-- {
+		heapify(arr, i, len(arr))
+	}
+
+	for heapSize := len(arr); heapSize > 1; heapSize-- {
+		arr[0], arr[heapSize-1] = arr[heapSize-1], arr[0]
+
+		heapify(arr, 0, heapSize-1)
+	}
+
+	return arr
+}
+
+func heapify(arr []int, i int, heapSize int) {
+
+	largeIdx := i
+	left := 2*i + 1
+	right := 2*i + 2
+
+	if left < heapSize && arr[i] < arr[left] {
+		largeIdx = left
+	}
+
+	if right < heapSize && arr[largeIdx] < arr[right] {
+		largeIdx = right
+	}
+
+	if i != largeIdx {
+		arr[i], arr[largeIdx] = arr[largeIdx], arr[i]
+		heapify(arr, largeIdx, heapSize)
+	}
+
+}
+
 func main() {
 	arr := []int{5, 4, 2, 1, 8, 9, 1, 6, 3, 7}
 	arr2 := []int{5, 4, 2, 1, 8, 9, 1, 6, 3, 7}
 	arr3 := []int{5, 4, 2, 1, 8, 9, 1, 6, 3, 7}
 	arr4 := []int{5, 4, 2, 1, 8, 9, 1, 6, 3, 7}
+	arr5 := []int{5, 4, 2, 1, 8, 9, 1, 6, 3, 7}
 
 	fmt.Println("source array:", arr)
 	fmt.Println("bubbleSort array:", bubbleSort(arr))
 	fmt.Println("insertionSort array:", insertionSort(arr2))
 	fmt.Println("mergeSort array:", mergeSort(arr3))
 	fmt.Println("quickSort array:", quickSort(arr4, 0, len(arr4)-1))
+	fmt.Println("heapSort array:", heapSort(arr5))
 }
